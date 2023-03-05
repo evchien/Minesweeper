@@ -1,27 +1,21 @@
 import de.bezier.guido.*;
-public final static int NUM_ROWS = 5;
-public final static int NUM_COLS = 5;
-public final static int NUM_MINES = 6;
-int minesLeft = NUM_MINES;
+public final static int NUM_ROWS = 20;
+public final static int NUM_COLS = 20;
+public final static int NUM_MINES = 65;
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> mines = new ArrayList <MSButton> ();
 
 void setup () {
-  size(400, 450);
-  background(255);
+  size(600, 650);
   textAlign(CENTER, CENTER);
-
   // make the manager
   Interactive.make( this );
-
-  //your code to initialize buttons goes here
   buttons = new MSButton[NUM_ROWS][NUM_COLS];
   for (int r = 0; r < NUM_ROWS; r++) {
     for (int c = 0; c < NUM_COLS; c++) {
       buttons[r][c] = new MSButton(r, c);
     }
   }
-
   setMines();
 }
 
@@ -31,22 +25,16 @@ public void setMines() {
     int randC = (int)(Math.random()*NUM_COLS);
     if (!mines.contains(buttons[randR][randC])) {
       mines.add(buttons[randR][randC]);
-      System.out.println(randR+", "+randC);
+      //System.out.println(randR+", "+randC);
     }
   }
 }
 
 public void draw () {
-  background(255);
   if (isWon())
-    background(255);
     displayWinningMessage();
   if(!isWon())
-    background(255);
-    fill(0);
-    textSize(22);
-    text("Mines Left: "+minesLeft, 200,425);
-    textSize(12);
+    background(255); //need to keep this for some reason
 }
 
 public boolean isWon() {
@@ -60,18 +48,14 @@ public boolean isWon() {
 }
 
 public void displayLosingMessage() {
-  background(255);
-  fill(0);
   textSize(22);
-  text("You Lost! Reload to play again", 200,425);
+  text("You Lost! Reload to play again", 300,622);
   textSize(12); //return to original size for labels
 }
 
 public void displayWinningMessage() {
-  background(255);
-  fill(0);
   textSize(22);
-  text("You Won! Reload to play again", 200,425);
+  text("You Won! Reload to play again", 300,622);
   textSize(12);
 }
 
@@ -101,8 +85,8 @@ public class MSButton {
   private String myLabel;
 
   public MSButton ( int row, int col ) {
-    width = 400/NUM_COLS;
-    height = 400/NUM_ROWS;
+    width = 600/NUM_COLS;
+    height = 600/NUM_ROWS;
     myRow = row;
     myCol = col; 
     x = myCol*width;
@@ -118,11 +102,9 @@ public class MSButton {
       if (flagged == true) {
         flagged = false;
         clicked = false;
-        minesLeft++; //unflagging so since count is based on flags, +1
       } 
       else{
         flagged = true;
-        minesLeft--;
       }
     } 
     else if (clicked && mines.contains(this)) {
@@ -144,8 +126,10 @@ public class MSButton {
   public void draw () {    
     if (flagged)
       fill(0);
-    else if (clicked && mines.contains(this) ) 
-      fill(255, 0, 0);
+    else if (clicked && mines.contains(this)){
+      fill(255,0,0);
+      displayLosingMessage();
+    }
     else if (clicked)
       fill(200);
     else 
