@@ -48,6 +48,10 @@ public boolean isWon() {
 }
 
 public void displayLosingMessage() {
+  for(int i = 0; i < mines.size(); i++){
+    if(mines.get(i).clicked == false)
+      mines.get(i).mousePressed();
+  }
   textSize(22);
   text("You Lost! Reload to play again", 300,622);
   textSize(12); //return to original size for labels
